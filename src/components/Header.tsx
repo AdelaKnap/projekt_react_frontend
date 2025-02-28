@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
 import "../components/Header.css";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
+
+    const { user, logout } = useAuth();
 
     return (
         <header>
@@ -18,9 +21,10 @@ const Header = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>
-                            Logga in
-                        </NavLink>
+                        {
+                            // Om användaren inte är inloggad visas Logga in och annars Logga ut-knapp
+                            !user ? <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>Logga in</NavLink> : <button onClick={logout}>Logga ut</button>
+                        }
                     </li>
                 </ul>
             </nav>

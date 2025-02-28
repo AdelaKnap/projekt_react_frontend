@@ -6,6 +6,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Routing med layout fil som huvudfil
 const router = createBrowserRouter([
@@ -31,7 +32,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/profile",
-                element: <ProfilePage />     // Ska vara skyddad
+                element: (
+                    <ProtectedRoute>
+                        <ProfilePage />     
+                    </ProtectedRoute>
+                )
             },
             {
                 path: "*",
