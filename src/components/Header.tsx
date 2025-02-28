@@ -14,7 +14,7 @@ const Header = () => {
                     </li>
                     <li>
                         <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
-                            Min sida
+                            Mina recensioner
                         </NavLink>
                     </li>
                     <li>
