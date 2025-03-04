@@ -12,9 +12,10 @@ const HomePage = () => {
             {/* Sökformulär */}
             <form className="search-form">
                 <label htmlFor="search"></label>
-                <input type="text" placeholder="Sök efter produkt" value={search} onChange={(event) => setSearch(event.target.value)} />
+                <input type="text" placeholder="Sök efter bok/författare..." value={search} onChange={(event) => setSearch(event.target.value)} />
             </form>
 
+            {/* Skicka med sökfras som prop och annars mysteri-genre */}
             <BookList query={search || "subject:mystery"} />
         </div>
     );

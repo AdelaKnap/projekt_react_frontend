@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BookInterface } from "../types/BookInterface";
 import "../components/BookList.css";
+import { Link } from "react-router-dom";
 
 // Sätt böcker i genre mysterier som default
 const default_query = "subject:mystery";
@@ -11,7 +12,7 @@ const fetchBooks = async (query: string, maxResults: number = 40, startIndex: nu
         const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${maxResults}&startIndex=${startIndex}`);
         const data = await response.json();
 
-        return data.items || [];  
+        return data.items || [];
     } catch (error) {
         console.error("Fel vid hämtning av böcker:", error);
         return [];
@@ -39,8 +40,10 @@ const BookList = ({ query }: { query: string }) => {
         <div className="book-list">
             {books.length > 0 ? (        // Kontroll om böcker finns
                 books.map((book) => (
-                    <div className="book-card" key={book.id}>
-                        {book.volumeInfo.imageLinks?.thumbnail && (    // Bild, om det finns
+                    // Länk till enskild sida utifrån id
+                    <Link to={`/book/${book.id}`} key={book.id} className="book-card">
+
+                        {book.volumeInfo.imageLinks?.thumbnail && (        // Bild, om det finns
                             <img
                                 className="book-image"
                                 src={book.volumeInfo.imageLinks.thumbnail}
@@ -51,7 +54,7 @@ const BookList = ({ query }: { query: string }) => {
                             <h3 className="book-title">{book.volumeInfo.title}</h3>
                             <p className="book-authors">{book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
                         </div>
-                    </div>
+                    </Link>
                 ))
             ) : (
                 // Om inga böcker hittades, visa ett meddelande
