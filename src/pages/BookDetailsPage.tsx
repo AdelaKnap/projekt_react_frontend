@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BookInterface } from "../types/BookInterface";
+import "./css/BookDetailsPage.css";
 
-// Hämta id från url:en
+// Funktion för att ta bort html från beskrivningen
+const cleanHtml = (html: string): string => {
+    const text = new DOMParser().parseFromString(html, "text/html");
+    return text.body.textContent || "";
+};
+
 const BookDetailsPage = () => {
+
+    // Hämta id från url:en
     const { id } = useParams<{ id: string }>();
 
     // States
@@ -30,11 +38,14 @@ const BookDetailsPage = () => {
             }
 
             const data = await response.json();
-            if (!data.volumeInfo) {                
+            if (!data.volumeInfo) {
                 throw new Error("Boken hittades inte.");
             }
 
-            setBook(data);  
+            // Rensa html i description
+            const cleanDescription = cleanHtml(data.volumeInfo.description || "Tyvärr, ingen beskrivning hittades.");
+
+            setBook({ ...data, volumeInfo: { ...data.volumeInfo, description: cleanDescription } });
 
         } catch (error) {
             console.error(error);

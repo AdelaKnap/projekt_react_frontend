@@ -1,0 +1,56 @@
+.book-details {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 10%;
+}
+
+.book-details h2 {
+    margin-bottom: 10px;
+}
+
+.book-details img {
+    width: 200px;
+    height: auto;
+    margin: 20px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.book-details p {
+    margin: 0 auto;
+    font-size: 1.1em;
+    max-width: 60ch;
+    line-height: 1.8em;
+    margin-bottom: 10px;
+}
+
+.book-details strong {
+    display: block;
+}
+
+.book-details a {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 10px 16px;
+    background: #0077cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+}
+
+.book-details a:hover {
+    background: #005fa3;
+}
+
+/* Felmeddelande */
+.errorMess {
+    color: red;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 20px;
+}
