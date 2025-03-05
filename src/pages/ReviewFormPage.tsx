@@ -16,7 +16,7 @@ const ReviewForm = () => {
 
     // States
     const [reviewText, setReviewText] = useState("");
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(1);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 

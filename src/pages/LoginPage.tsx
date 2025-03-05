@@ -65,7 +65,7 @@ const LoginPage = () => {
                     />
                     <button type="submit">Logga in</button>
 
-                    <p><Link to="/register">Skapa ny användare här</Link></p>
+                    <p><Link to="/create-user">Skapa ny användare här</Link></p>
                 </form>
             </div>
         </>
