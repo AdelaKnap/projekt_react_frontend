@@ -7,6 +7,7 @@ import RegisterPage from "./pages/RegisterPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ReviewFormPage from "./pages/ReviewFormPage";
 
 // Routing med layout fil som huvudfil
 const router = createBrowserRouter([
@@ -31,10 +32,18 @@ const router = createBrowserRouter([
                 element: <RegisterPage />
             },
             {
-                path: "/profile",
+                path: "/profile/:bookId?",
                 element: (
                     <ProtectedRoute>
                         <ProfilePage />     
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: "/reviewform/:bookId?",
+                element: (
+                    <ProtectedRoute>
+                        <ReviewFormPage />     
                     </ProtectedRoute>
                 )
             },

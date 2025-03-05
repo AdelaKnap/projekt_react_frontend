@@ -68,6 +68,12 @@ const BookDetailsPage = () => {
                     <p><strong>Författare:</strong> {book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
                     <p><strong>Beskrivning:</strong> {book.volumeInfo.description || "Ingen beskrivning finns."}</p>
 
+                    {/* Länk till reviewform-sidan */}
+                    <Link
+                        to={`/reviewform/${book.id}`} state={{ title: book.volumeInfo.title }} className="review-link">
+                        Skriv recension
+                    </Link>
+
                     <Link to="/">⬅ Tillbaka till startsidan</Link>
                 </div>
 

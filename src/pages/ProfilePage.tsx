@@ -1,10 +1,18 @@
+import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
+    const { user } = useAuth();
+
+    console.log("Användare från context:", user);
+    console.log("Användar-ID:", user?._id); 
+
     return (
-        <div>ProfilePage</div>
+        <div>
+            <h1>Hej {user?._id || "Ingen användare"}</h1>
 
-        // Komponent för review
-    )
-}
 
-export default ProfilePage
+        </div>
+    );
+};
+
+export default ProfilePage;
