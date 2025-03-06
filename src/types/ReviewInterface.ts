@@ -9,3 +9,5 @@ export interface ReviewInterface {
     __v?: number
 
 }
+
+// Lägga till datum och username kanske?

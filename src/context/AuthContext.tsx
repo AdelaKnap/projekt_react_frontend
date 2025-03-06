@@ -84,6 +84,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (!response.ok) throw new Error("Misslyckades att logga ut");
 
+            localStorage.removeItem("userId");
             setUser(null);
 
         } catch (error) {

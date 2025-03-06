@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { ReviewInterface } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
@@ -20,8 +20,24 @@ const ReviewForm = () => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
+    // Spara userId i localStorage när användaren är inloggad
+    useEffect(() => {
+        if (user?._id) {
+            localStorage.setItem("userId", user._id);
+        }
+    }, [user]);
+
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        // Läs userId från localStorage
+        const savedUserId = localStorage.getItem("userId");
+
+        // Om userId inte finns i localStorage, visa ett felmeddelande
+        if (!savedUserId) {
+            setError("Du måste vara inloggad för att lämna en recension.");
+            return;
+        }
 
         // Objektet som ska skickas
         const review: ReviewInterface = {
@@ -32,13 +48,13 @@ const ReviewForm = () => {
 
         // Ta bort sen
         console.log("Review innan skickat:", review);
-        console.log("User id:", user?._id);
+        console.log("User id från localStorage:", savedUserId);
 
         try {
             setError(null);
             setSuccess(null);
 
-            const requestBody = JSON.stringify({ ...review, userId: user?._id });
+            const requestBody = JSON.stringify({ ...review, userId: savedUserId });
 
             console.log("JSON Payload:", requestBody);   // Ta bort sen och flytta bodyn till anropet
 
@@ -64,7 +80,7 @@ const ReviewForm = () => {
             setSuccess("Recensionen sparades!");
             // Rensa formuläret
             setReviewText("");
-            setRating(0);
+            setRating(1);
 
         } catch (err) {
             console.error(err);
