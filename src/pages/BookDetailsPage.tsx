@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BookInterface } from "../types/BookInterface";
-import { ReviewInterface } from "../types/ReviewInterface";
+import ReviewsList from "../components/ReviewsList";
 import "./css/BookDetailsPage.css";
 
 // Funktion för att ta bort html från beskrivningen
@@ -11,29 +11,24 @@ const cleanHtml = (html: string): string => {
 };
 
 const BookDetailsPage = () => {
+    const { id } = useParams<{ id: string }>(); // Hämta id från url:en
+    const [book, setBook] = useState<BookInterface | null>(null); // Bokdata
+    const [error, setError] = useState<string | null>(null); // Felmeddelanden
 
-    // States
-    const { id } = useParams<{ id: string }>();      // Hämta id från url:en
-    const [book, setBook] = useState<BookInterface | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [reviews, setReviews] = useState<ReviewInterface[]>([]);
-
-    // useEffect för att hämta bokinfo
     useEffect(() => {
         if (id) {
             getBook(id);  // Hämta bokdetaljer
-            getReviews(id);  // Hämta recensioner för boken
         }
     }, [id]);
 
     // Funktion för att hämta böcker
     const getBook = async (bookId: string) => {
         try {
-
-            setError(null);
+            setError(null); // Nollställ tidigare felmeddelande
 
             const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`);
 
+            // Om response inte är ok, kasta ett fel
             if (!response.ok) {
                 throw new Error("Något gick fel vid hämtning av boken.");
             }
@@ -50,37 +45,21 @@ const BookDetailsPage = () => {
 
         } catch (error) {
             console.error(error);
-            setError("Något gick fel vid hämtning av boken.");
+            setError("Något gick fel vid hämtning av boken."); // Felhantering
         }
     };
-
-    // Hämta recensioner
-    const getReviews = async (bookId: string) => {
-        try {
-            const response = await fetch(`http://localhost:3000/reviews?bookId=${bookId}`);
-
-            if (!response.ok) {
-                throw new Error("Något gick fel vid hämtning av recensionerna.");
-            }
-            const data = await response.json();
-            setReviews(data);       // recensionerna i state
-
-        } catch (error) {
-            console.error(error);
-            setError("Något gick fel vid hämtning av recensionerna.");
-        }
-    };
-
 
     return (
         <>
             <h1>Detaljer om boken</h1>
 
-            {error && <p className="errorMess">{error}</p>}
+            {error && <p className="errorMess">{error}</p>} {/* Visa felmeddelande om det finns */}
 
-            {book && book.volumeInfo && (       // All relevant info ligger under volumeInfo
+            {book && book.volumeInfo && ( // All relevant info ligger under volumeInfo
                 <div className="book-details">
+
                     <h2>{book.volumeInfo.title}</h2>
+
                     {book.volumeInfo.imageLinks?.thumbnail && (
                         <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
                     )}
@@ -95,28 +74,10 @@ const BookDetailsPage = () => {
                         Skriv recension (Kräver inloggning)
                     </Link>
 
-                    {/* Visa recensioner */}
-                    <div className="reviews-section">
-                        <h3>Recensioner</h3>
-                        {reviews.length === 0 ? (
-                            <p>Det finns inga recensioner än!</p>
-                        ) : (
-                            <ul>
-                                {reviews.map((review) => (
-                                    <div key={review._id}>
-                                        <p><strong>Recension:</strong> {review.reviewText}</p>
-                                        <p><strong>Betyg:</strong> {review.rating}</p>
-                                    </div>
-                                ))}
-
-                            </ul>
-                        )}
-                    </div>
+                    {/* ReviewsList-komponenten för recensionerna */}
+                    <ReviewsList bookId={id || ""} />
                 </div>
-
             )}
-
-
         </>
     );
 };

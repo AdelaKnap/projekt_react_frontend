@@ -60,7 +60,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             if (!response.ok) throw new Error("Ingen session hittades");
 
             const data = await response.json();
-            setUser(data.user);
+
+            setUser(data.user.user || data.user);
 
         } catch (error) {
             console.error("Fel vid kontroll av cookie/session:", error);

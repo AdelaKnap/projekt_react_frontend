@@ -1,13 +1,13 @@
-
 export interface ReviewInterface {
-
-    _id?: string,
-    bookId?: string,
-    userId?: string,
-    reviewText: string,
-    rating: number,
-    __v?: number
-
+    _id?: string;
+    bookId?: string;
+    bookTitle?: string;
+    userId?: {
+        _id?: string;
+        username?: string;
+    };
+    reviewText: string;
+    rating: number;
+    created?: string;
+    __v?: number;
 }
-
-// Lägga till datum och username kanske?

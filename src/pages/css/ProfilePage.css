@@ -1,0 +1,44 @@
+.profile-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.review-card {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.edit-form textarea,
+.edit-form input {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+}

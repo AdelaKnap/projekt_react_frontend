@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { ReviewInterface } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
@@ -20,21 +20,10 @@ const ReviewForm = () => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
-    // Spara userId i localStorage när användaren är inloggad
-    useEffect(() => {
-        if (user?._id) {
-            localStorage.setItem("userId", user._id);
-        }
-    }, [user]);
-
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Läs userId från localStorage
-        const savedUserId = localStorage.getItem("userId");
-
-        // Om userId inte finns i localStorage, visa ett felmeddelande
-        if (!savedUserId) {
+        if (!user?._id) {
             setError("Du måste vara inloggad för att lämna en recension.");
             return;
         }
@@ -42,21 +31,14 @@ const ReviewForm = () => {
         // Objektet som ska skickas
         const review: ReviewInterface = {
             bookId: bookId || "",
+            bookTitle: bookTitle,
             reviewText,
             rating
         };
 
-        // Ta bort sen
-        console.log("Review innan skickat:", review);
-        console.log("User id från localStorage:", savedUserId);
-
         try {
             setError(null);
             setSuccess(null);
-
-            const requestBody = JSON.stringify({ ...review, userId: savedUserId });
-
-            console.log("JSON Payload:", requestBody);   // Ta bort sen och flytta bodyn till anropet
 
             const response = await fetch("http://localhost:3000/reviews", {
                 method: "POST",
@@ -64,14 +46,8 @@ const ReviewForm = () => {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: requestBody,
+                body: JSON.stringify({ ...review, userId: user._id }),
             });
-
-            const responseData = await response.json();
-
-            // Ta bort sen
-            console.log("Response status:", response.status);
-            console.log("Response data:", responseData);
 
             if (!response.ok) {
                 throw new Error("Misslyckades att lägga till recension");
