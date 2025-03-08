@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReviewInterface } from "../types/ReviewInterface";
-
+import "./css/ProfilePage.css";
 
 const ProfilePage = () => {
 
@@ -108,9 +108,9 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="profile-container">
+        <section className="profile-container">
 
-            <h2>Mina recensioner</h2>
+            <h1>Mina recensioner</h1>
 
             {/* Felmeddelande */}
             {error && <p className="error">{error}</p>}
@@ -126,7 +126,7 @@ const ProfilePage = () => {
                     return (
                         <div key={review._id} className="review-card">
 
-                            <h3>{review.bookTitle}</h3>
+                            <h2>{review.bookTitle}</h2>
 
                             {/* Ej redigering, "visningsläge" */}
                             {!isEditing && (
@@ -149,19 +149,34 @@ const ProfilePage = () => {
 
                             {/* Om "redigeringsläge" */}
                             {isEditing && (
-                                <div className="edit-form">
-                                    <textarea value={updatedText} onChange={(e) => setUpdatedText(e.target.value)} />
-                                    <input type="number" min="1" max="5" value={updatedRating} onChange={(e) => setUpdatedRating(Number(e.target.value))} />
-
-                                    <button onClick={() => review._id && handleUpdate(review._id)}>Spara</button>
-                                    <button onClick={() => setHandleReview(null)}>Avbryt</button>
-                                </div>
+                                <form
+                                    className="edit-form"
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        if (review._id) handleUpdate(review._id);
+                                    }}
+                                >
+                                    <textarea
+                                        value={updatedText}
+                                        onChange={(e) => setUpdatedText(e.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="5"
+                                        value={updatedRating}
+                                        onChange={(e) => setUpdatedRating(Number(e.target.value))}
+                                    />
+                                    
+                                    <button type="submit">Spara</button>
+                                    <button type="button" onClick={() => setHandleReview(null)}>Avbryt</button>
+                                </form>
                             )}
                         </div>
                     );
                 })
             )}
-        </div>
+        </section>
     );
 
 };

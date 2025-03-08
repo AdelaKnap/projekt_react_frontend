@@ -1,66 +1,109 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { BookInterface } from "../types/BookInterface";
 import { Link } from "react-router-dom";
 import "../components/BookList.css";
 
+// Standardvärden för query och max-resultat per sida
+const defaultQuery = "subject:mystery";
+const maxResult = 40;
 
-// Sätt böcker i genre mysterier som default
-const default_query = "subject:mystery";
+// Funktion för att sätta ihop url
+const buildUrl = (query: string, startIndex: number): string => {
 
-// Funktion för att hämta böcker från Google Books API, med 40 böcker i resultatet (som är max-antalet)
-const fetchBooks = async (query: string, maxResults: number = 40, startIndex: number = 0): Promise<BookInterface[]> => {
+    const baseUrl = 'https://www.googleapis.com/books/v1/volumes';
+    const url = `${baseUrl}?q=${query}&maxResults=${maxResult}&startIndex=${startIndex}`;
+
+    return url;  // Den sammansatta sökvägen
+};
+
+// Funktion för att hämta böcker från google books
+const fetchBooks = async (query: string, startIndex: number) => {
+
     try {
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${maxResults}&startIndex=${startIndex}`);
-        const data = await response.json();
+        const apiUrl = buildUrl(query, startIndex);
 
-        return data.items || [];
+        // Fetch-anrop
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error("Något gick fel vid hämtning av böcker.");
+        }
+
+        return await response.json();
+
     } catch (error) {
         console.error("Fel vid hämtning av böcker:", error);
-        return [];
+        return { items: [], totalItems: 0 };    // returnera tom array och 0 böcker 
     }
 };
 
-// BookList-komponenten som tar emot en query som prop
+// BookList-komponenten med böcker och paginering
 const BookList = ({ query }: { query: string }) => {
 
-    // State för böcker
+    // States för böcker och sidor
     const [books, setBooks] = useState<BookInterface[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
-    // useEffect 
+    // useCallback för att hämta böcker baserat på query och currentPage
+    const getBooks = useCallback(async () => {
+
+        const searchQuery = query.trim() || defaultQuery;
+        const startIndex = currentPage * maxResult;                  // startIndex utifrån aktuell sida för att få rätt antal böcker
+
+        // Fetch-anrop för böcker
+        const { items, totalItems } = await fetchBooks(searchQuery, startIndex);
+
+        setBooks(items);                                             // Uppdatera state med nya böcker
+        setTotalPages(Math.ceil(totalItems / maxResult));            // Antalet sidor utifrån totala antalet böcker och maxResult
+
+    }, [query, currentPage]);                                        // Kör när query eller currentPage ändras
+
+    // UseEffect, nollställ sidan när query ändras
     useEffect(() => {
-        const getBooks = async () => {
-            const searchQuery = query.trim() ? query : default_query;       // Använd default_query om sökfältet är tomt
-            const fetchedBooks = await fetchBooks(searchQuery);
-            setBooks(fetchedBooks);
-        };
-
-        getBooks();
+        setCurrentPage(0);
     }, [query]);
 
-    return (
-        <div className="book-list">
-            {books.length > 0 ? (        // Kontroll om böcker finns
-                books.map((book) => (
-                    // Länk till enskild sida utifrån id
-                    <Link to={`/book/${book.id}`} key={book.id} className="book-card">
+    // Hämtar böcker när query eller currentPage ändras
+    useEffect(() => {
+        getBooks();
+    }, [getBooks]);
 
-                        {book.volumeInfo.imageLinks?.thumbnail && (        // Bild, om det finns
-                            <img
-                                className="book-image"
-                                src={book.volumeInfo.imageLinks.thumbnail}
-                                alt={book.volumeInfo.title}
-                            />
-                        )}
-                        <div className="book-info">
-                            <h3 className="book-title">{book.volumeInfo.title}</h3>
-                            <p className="book-authors">{book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
-                        </div>
-                    </Link>
-                ))
-            ) : (
-                // Om inga böcker hittades, visa ett meddelande
-                <p>Inga böcker hittades.</p>
-            )}
+    // Funktion för att ändra sida
+    const changePage = (direction: number) => {
+        setCurrentPage((prev) => {
+            const newPage = prev + direction;
+            return Math.min(Math.max(newPage, 0), totalPages - 1);
+        });
+    };
+
+    return (
+        <div>
+            {/* Lista böcker */}
+            <div className="book-list">
+                {books.length ? (
+                    books.map((book) => (
+                        <Link to={`/book/${book.id}`} key={book.id} className="book-card">
+                            {book.volumeInfo.imageLinks?.thumbnail && (
+                                <img className="book-image" src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
+                            )}
+                            <div className="book-info">
+                                <h3 className="book-title">{book.volumeInfo.title}</h3>
+                                <p className="book-authors">{book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
+                            </div>
+                        </Link>
+                    ))
+                ) : (
+                    <p>Inga böcker hittades.</p>
+                )}
+            </div>
+
+            {/* Paginering */}
+            <div className="pagination">
+                <button onClick={() => changePage(-1)} disabled={currentPage === 0}>Föregående</button>
+                <span>Sida {currentPage + 1} av {totalPages}</span>
+                <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1}>Nästa</button>
+            </div>
         </div>
     );
 };

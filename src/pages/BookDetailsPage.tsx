@@ -4,16 +4,16 @@ import { BookInterface } from "../types/BookInterface";
 import ReviewsList from "../components/ReviewsList";
 import "./css/BookDetailsPage.css";
 
-// Funktion för att ta bort html från beskrivningen
+// Funktion för att ta bort html-taggar och tecken från beskrivningen
 const cleanHtml = (html: string): string => {
     const text = new DOMParser().parseFromString(html, "text/html");
     return text.body.textContent || "";
 };
 
 const BookDetailsPage = () => {
-    const { id } = useParams<{ id: string }>(); // Hämta id från url:en
-    const [book, setBook] = useState<BookInterface | null>(null); // Bokdata
-    const [error, setError] = useState<string | null>(null); // Felmeddelanden
+    const { id } = useParams<{ id: string }>();                     // Hämta id från url:en
+    const [book, setBook] = useState<BookInterface | null>(null);   // Bokdata
+    const [error, setError] = useState<string | null>(null);        // Felmeddelanden
 
     useEffect(() => {
         if (id) {

@@ -3,7 +3,16 @@ import BookList from "../components/BookList";
 import "./css/HomePage.css";
 
 const HomePage = () => {
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(""); // För sök-fras
+    const [genre, setGenre] = useState("mystery"); // Förvalt genre
+
+    // Lista med genrer
+    const genres = ["Mystery", "Fantasy", "History", "Fiction", "Romance"];
+
+    // Funktion för dropdown
+    const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setGenre(event.target.value);
+    };
 
     return (
         <div>
@@ -15,8 +24,19 @@ const HomePage = () => {
                 <input type="text" placeholder="Sök efter bok/författare..." value={search} onChange={(event) => setSearch(event.target.value)} />
             </form>
 
-            {/* Skicka med sökfras som prop och annars mysteri-genre */}
-            <BookList query={search || "subject:mystery"} />
+            {/* Dropdown */}
+            <div>
+                <label htmlFor="genre">Välj genre:</label>
+                <select id="genre" value={genre} onChange={handleGenreChange}>
+                    {/* Loopa genom listan och skapar ett alternativ för varje val */}
+                    {genres.map((g) => (
+                        <option key={g} value={g}> {g} </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Skicka med sökfras eller genre som prop */}
+            <BookList query={search || `subject:${genre}`} />
         </div>
     );
 };

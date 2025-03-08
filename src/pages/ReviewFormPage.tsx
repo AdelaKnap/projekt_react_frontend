@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { ReviewInterface } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
+import "./css/ReviewFormPage.css";
 
 const ReviewForm = () => {
     // Hämtar bookId från URL:en
@@ -81,6 +82,10 @@ const ReviewForm = () => {
 
                 <button type="submit">Spara</button>
             </form>
+
+            <Link to="/">⬅ Tillbaka till startsidan</Link>
+
+            <Link to="/profile">Till mina recensioner ➡</Link>
         </section>
     );
 };
