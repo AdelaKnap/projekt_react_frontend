@@ -51,7 +51,7 @@ const BookDetailsPage = () => {
 
     return (
         <>
-            <h1>Detaljer om boken</h1>
+            <h1>Bokinformation</h1>
 
             {error && <p className="errorMess">{error}</p>} {/* Visa felmeddelande om det finns */}
 

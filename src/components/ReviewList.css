@@ -1,0 +1,22 @@
+.reviews-section {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Enskild recension */
+.bookReview {
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid #ddd;
+}
+
+.bookReview p {
+    margin-bottom: 2em;
+}
+
+.bookReview p strong {
+    display: inline;
+}
+
+

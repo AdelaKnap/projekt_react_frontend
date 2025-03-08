@@ -18,22 +18,25 @@ const buildUrl = (query: string, startIndex: number): string => {
 
 // Funktion för att hämta böcker från google books
 const fetchBooks = async (query: string, startIndex: number) => {
-
     try {
         const apiUrl = buildUrl(query, startIndex);
-
-        // Fetch-anrop
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
             throw new Error("Något gick fel vid hämtning av böcker.");
         }
 
-        return await response.json();
+        const data = await response.json();
+
+        return {
+            items: data.items || [],            // array med böcker eller tom
+            totalItems: data.totalItems || 0,   // totalItems eller 0
+            error: ""
+        };
 
     } catch (error) {
         console.error("Fel vid hämtning av böcker:", error);
-        return { items: [], totalItems: 0 };    // returnera tom array och 0 böcker 
+        return { items: [], totalItems: 0, error: (error instanceof Error ? error.message : "Något gick fel.") };
     }
 };
 
@@ -44,20 +47,33 @@ const BookList = ({ query }: { query: string }) => {
     const [books, setBooks] = useState<BookInterface[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     // useCallback för att hämta böcker baserat på query och currentPage
     const getBooks = useCallback(async () => {
 
+        if (!query.trim()) return;
+
+        setLoading(true);
+        setError("");
+
         const searchQuery = query.trim() || defaultQuery;
-        const startIndex = currentPage * maxResult;                  // startIndex utifrån aktuell sida för att få rätt antal böcker
+        const startIndex = currentPage * maxResult;          // startIndex utifrån aktuell sida för att få rätt antal böcker
 
         // Fetch-anrop för böcker
-        const { items, totalItems } = await fetchBooks(searchQuery, startIndex);
+        const { items, totalItems, error } = await fetchBooks(searchQuery, startIndex);
 
-        setBooks(items);                                             // Uppdatera state med nya böcker
-        setTotalPages(Math.ceil(totalItems / maxResult));            // Antalet sidor utifrån totala antalet böcker och maxResult
+        if (error) {
+            setError(error);
+        } else {
+            setBooks(items);
+            setTotalPages(Math.ceil(totalItems / maxResult));
+        }
 
-    }, [query, currentPage]);                                        // Kör när query eller currentPage ändras
+        setLoading(false);
+
+    }, [query, currentPage]);    // Kör när query eller currentPage ändras
 
     // UseEffect, nollställ sidan när query ändras
     useEffect(() => {
@@ -73,12 +89,15 @@ const BookList = ({ query }: { query: string }) => {
     const changePage = (direction: number) => {
         setCurrentPage((prev) => {
             const newPage = prev + direction;
-            return Math.min(Math.max(newPage, 0), totalPages - 1);
+            return Math.min(Math.max(newPage, 0), Math.max(totalPages - 1, 0));
         });
     };
 
     return (
         <div>
+            {loading && <p>Laddar böcker...</p>}
+            {error && <p className="error-message">{error}</p>}
+
             {/* Lista böcker */}
             <div className="book-list">
                 {books.length ? (
@@ -94,15 +113,15 @@ const BookList = ({ query }: { query: string }) => {
                         </Link>
                     ))
                 ) : (
-                    <p>Inga böcker hittades.</p>
+                    <p>Inga böcker hittades...</p>
                 )}
             </div>
 
             {/* Paginering */}
             <div className="pagination">
-                <button onClick={() => changePage(-1)} disabled={currentPage === 0}>Föregående</button>
-                <span>Sida {currentPage + 1} av {totalPages}</span>
-                <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1}>Nästa</button>
+                <button onClick={() => changePage(-1)} disabled={currentPage === 0 || totalPages === 0}>Föregående</button>
+                <span>Sida {totalPages > 0 ? currentPage + 1 : 0} av {totalPages}</span>
+                <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1 || totalPages === 0}>Nästa</button>
             </div>
         </div>
     );

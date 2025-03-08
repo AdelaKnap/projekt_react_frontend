@@ -5,7 +5,16 @@ main {
 }
 
 h1 {
-    margin-bottom: 1.8em;
+    font-size: 2em;
+    margin-bottom: 2em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.4em;
 }
 
 @media screen and (max-width: 768px) {
@@ -16,4 +25,9 @@ h1 {
     h2 {
         font-size: 1.4em;
     }
+
+    h3 {
+        font-size: 1.2em;
+    }
+    
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReviewInterface } from "../types/ReviewInterface";
+import * as Yup from "yup";
 import "./css/ProfilePage.css";
 
 const ProfilePage = () => {
@@ -7,9 +8,11 @@ const ProfilePage = () => {
     // States
     const [reviews, setReviews] = useState<ReviewInterface[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const [handleReview, setHandleReview] = useState<ReviewInterface | null>(null);
     const [updatedText, setUpdatedText] = useState<string>("");
     const [updatedRating, setUpdatedRating] = useState<number>(0);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
     // useEffect
     useEffect(() => {
@@ -19,6 +22,10 @@ const ProfilePage = () => {
     // Fubktion för att hämta recensioner
     const fetchReviews = async () => {
         try {
+
+            setLoading(true);
+            setError(null);
+
             const response = await fetch("http://localhost:3000/reviews/user", {
                 method: "GET",
                 credentials: "include"
@@ -30,16 +37,17 @@ const ProfilePage = () => {
             }
 
             if (!response.ok) {
-                throw new Error("Kunde inte hämta recensionerna.");
+                throw new Error("Något gick fel, kunde inte hämta recensionerna.");
             }
 
             const data = await response.json();
-            console.log(data);
-
             setReviews(data);
+
         } catch (error) {
             console.error(error);
             setError("Ett fel uppstod vid hämtning av recensionerna.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -65,6 +73,12 @@ const ProfilePage = () => {
         }
     };
 
+    // Valideringsschema med Yup
+    const validationSchema = Yup.object({
+        reviewText: Yup.string().trim().required("Recensionen får inte vara tom").min(5, "Texten måste vara minst 5 tecken lång."),
+        rating: Yup.number().min(1, "Betyget måste vara minst 1.").max(5, "Betyget får vara max 5.").required("Du måste välja ett betyg"),
+    });
+
     // Uppdatera recension
     const handleUpdate = async (id: string) => {
         try {
@@ -78,6 +92,12 @@ const ProfilePage = () => {
                 reviewText: updatedText,
                 rating: updatedRating
             };
+
+            // Validera innan PUT
+            await validationSchema.validate(reviewData, { abortEarly: false });
+
+            setValidationErrors({});
+            setError(null);
 
             // PUT-anrop
             const response = await fetch(`http://localhost:3000/reviews/${id}`, {
@@ -102,8 +122,18 @@ const ProfilePage = () => {
             setUpdatedRating(1);            // Sätt betyg till 1
 
         } catch (error) {
-            console.error(error);
-            setError("Ett fel uppstod vid uppdatering av recensionen.");
+            if (error instanceof Yup.ValidationError) {
+                const errors: { [key: string]: string } = {};
+                error.inner.forEach((err) => {
+                    errors[err.path || ""] = err.message;   // Lägg till felmeddelanden för varje input
+                });
+
+                setValidationErrors(errors);
+
+            } else {
+                console.error(error);
+                setError("Ett fel uppstod vid uppdatering av recensionen.");
+            }
         }
     };
 
@@ -112,11 +142,18 @@ const ProfilePage = () => {
 
             <h1>Mina recensioner</h1>
 
+            {loading && (
+                <div className="fetchInfo">
+                    <span className="loading-spinner"></span>
+                    <p><em>Hämtar recensioner...</em></p>
+                </div>
+            )}
+
             {/* Felmeddelande */}
             {error && <p className="error">{error}</p>}
 
             {/* Om inga recensioner visa ett meddelande */}
-            {reviews.length === 0 ? (
+            {reviews.length === 0 && !error ? (
                 <p>Du har inga recensioner ännu.</p>
             ) : (
                 reviews.map((review) => {
@@ -149,25 +186,17 @@ const ProfilePage = () => {
 
                             {/* Om "redigeringsläge" */}
                             {isEditing && (
-                                <form
-                                    className="edit-form"
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        if (review._id) handleUpdate(review._id);
-                                    }}
-                                >
-                                    <textarea
-                                        value={updatedText}
-                                        onChange={(e) => setUpdatedText(e.target.value)}
-                                    />
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="5"
-                                        value={updatedRating}
-                                        onChange={(e) => setUpdatedRating(Number(e.target.value))}
-                                    />
-                                    
+                                <form className="edit-form" onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (review._id) handleUpdate(review._id);
+                                }}>
+
+                                    <textarea value={updatedText} onChange={(e) => setUpdatedText(e.target.value)} />
+                                    {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
+
+                                    <input type="number" value={updatedRating} onChange={(e) => setUpdatedRating(Number(e.target.value))} />
+                                    {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
+
                                     <button type="submit">Spara</button>
                                     <button type="button" onClick={() => setHandleReview(null)}>Avbryt</button>
                                 </form>

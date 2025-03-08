@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReviewInterface } from "../types/ReviewInterface";
+import "../components/ReviewList.css";
 
 interface ReviewsListProps {
     bookId: string; // bookId som en prop
@@ -39,27 +40,27 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
     }, [bookId]); // Kör när bookId ändras
 
     return (
-        <div className="reviews-section">
+        <>
+            <h3>Recensioner</h3>
 
-            <h3>Recensioner:</h3>
-
-            {error && <p className="errorMess">{error}</p>} 
+            {error && <p className="errorMess">{error}</p>}
 
             {reviews.length === 0 ? (
-                <p>Det finns inga recensioner än!</p> 
+                <p>Det finns inga recensioner än!</p>
             ) : (
-                <ul>
+                <div className="reviews-section">
                     {/* Loopar genom recensionerna */}
                     {reviews.map((review) => (
-                        <div key={review._id}>
+                        <div key={review._id} className="bookReview">
                             <p>{review.reviewText}</p>
                             <p><strong>Betyg:</strong> {review.rating} / 5</p>
                             <p><strong>Av:</strong> {review.userId?.username}, {review.created ? new Date(review.created).toLocaleDateString() : ""}</p>
                         </div>
                     ))}
-                </ul>
+                </div>
             )}
-        </div>
+        </>
+
     );
 };
 

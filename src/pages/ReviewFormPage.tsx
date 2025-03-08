@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { ReviewInterface } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
+import * as Yup from "yup";
 import "./css/ReviewFormPage.css";
 
 const ReviewForm = () => {
+    
     // Hämtar bookId från URL:en
     const { bookId } = useParams<{ bookId: string }>();
 
@@ -20,6 +22,13 @@ const ReviewForm = () => {
     const [rating, setRating] = useState(1);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+    // Valideringsschema med yup
+    const validationSchema = Yup.object({
+        reviewText: Yup.string().trim().required("Recensionen får inte vara tom").min(5, "Texten måste vara minst 5 tecken lång."),
+        rating: Yup.number().min(1, "Betyget måste vara minst 1.").max(5, "Betyget får vara max 5.").required("Du måste välja ett betyg"),
+    });
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -38,6 +47,10 @@ const ReviewForm = () => {
         };
 
         try {
+            // Validering
+            await validationSchema.validate(review, { abortEarly: false });
+
+            setValidationErrors({});
             setError(null);
             setSuccess(null);
 
@@ -60,8 +73,18 @@ const ReviewForm = () => {
             setRating(1);
 
         } catch (err) {
-            console.error(err);
-            setError("Något gick fel. Försök igen senare.");
+            if (err instanceof Yup.ValidationError) {
+                const errors: { [key: string]: string } = {};
+                err.inner.forEach((error) => {
+                    errors[error.path || ""] = error.message;    // Lägg till felmeddelanden för varje input
+                });
+
+                setValidationErrors(errors);
+
+            } else {
+                console.error(err);
+                setError("Något gick fel. Försök igen senare.");
+            }
         }
     };
 
@@ -77,8 +100,12 @@ const ReviewForm = () => {
                 <label htmlFor="reviewText">Recension:</label>
                 <textarea id="reviewText" name="reviewText" value={reviewText} placeholder="Skriv din recension här..." onChange={(e) => setReviewText(e.target.value)} />
 
+                {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
+
                 <label htmlFor="rating">Sätt ett betyg, 1-5:</label>
-                <input type="number" id="rating" name="rating" value={rating} onChange={(e) => setRating(parseInt(e.target.value))} min={1} max={5} />
+                <input type="number" id="rating" name="rating" value={rating} onChange={(e) => setRating(parseInt(e.target.value))} />
+
+                {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
 
                 <button type="submit">Spara</button>
             </form>
