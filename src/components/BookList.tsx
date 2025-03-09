@@ -119,9 +119,9 @@ const BookList = ({ query }: { query: string }) => {
 
             {/* Paginering */}
             <div className="pagination">
-                <button onClick={() => changePage(-1)} disabled={currentPage === 0 || totalPages === 0}>Föregående</button>
+                <button onClick={() => changePage(-1)} disabled={currentPage === 0 || totalPages === 0}>⬅ Föregående</button>
                 <span>Sida {totalPages > 0 ? currentPage + 1 : 0} av {totalPages}</span>
-                <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1 || totalPages === 0}>Nästa</button>
+                <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1 || totalPages === 0}>Nästa ➡</button>
             </div>
         </section>
     );

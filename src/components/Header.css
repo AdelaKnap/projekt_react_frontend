@@ -95,4 +95,23 @@ nav ul li a:hover {
         margin-top: 10px;
         text-align: center;
     }
+
+    .logo {
+        width: 50px;
+        height: auto;
+    }
+
+    .auth-link a {
+        font-size: 14px;
+    }
+
+    .auth-link a:hover {
+        background-color: #ff9800;
+        color: white;
+    }
+
+    .auth-link button {
+        font-size: 14px;
+    }
+
 }
