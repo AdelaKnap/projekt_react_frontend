@@ -27,7 +27,7 @@ const LoginPage = () => {
         e.preventDefault();
         setError("");
 
-        
+
         try {
             await login({ username, password });   // login-funktionen från AuthContext
             navigate("/profile");                  // Till profilsidan vid lyckad inloggning
@@ -42,31 +42,28 @@ const LoginPage = () => {
 
     return (
         <>
-            <h1>Logga in</h1>
-            <div className="login-container">
-                <h2>Inloggningsuppgifter</h2>
+            <div className="container">
 
-                <form onSubmit={handleSubmit} className="login-form">
-                    {error && (
-                        <div className="errorMessage">{error}</div>
-                    )}
+                <h1>Logga in</h1>
 
-                    <input
-                        type="text"
-                        placeholder="Användarnamn"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Lösenord"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="submit">Logga in</button>
+                <div className="login-container">
 
-                    <p><Link to="/create-user">Skapa ny användare här</Link></p>
-                </form>
+                    <h2>Inloggningsuppgifter</h2>
+
+                    <form onSubmit={handleSubmit} className="login-form">
+                        {error && (
+                            <div className="errorMessage">{error}</div>
+                        )}
+
+                        <input type="text" placeholder="Användarnamn" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <input type="password" placeholder="Lösenord" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <button type="submit">Logga in</button>
+
+                        <p><Link to="/create-user">Skapa ny användare här</Link></p>
+
+                    </form>
+                </div>
+
             </div>
         </>
     );

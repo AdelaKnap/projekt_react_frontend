@@ -15,7 +15,8 @@ const HomePage = () => {
     };
 
     return (
-        <div>
+        <div className="container">
+
             <h1>Böcker</h1>
 
             {/* Sökformulär */}
@@ -25,8 +26,8 @@ const HomePage = () => {
             </form>
 
             {/* Dropdown */}
-            <div>
-                <label htmlFor="genre">Välj genre:</label>
+            <div className="genre">
+                <label htmlFor="genre">Välj kategori:</label>
                 <select id="genre" value={genre} onChange={handleGenreChange}>
                     {/* Loopa genom listan och skapar ett alternativ för varje val */}
                     {genres.map((g) => (

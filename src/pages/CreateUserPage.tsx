@@ -77,24 +77,30 @@ const CreateUserPage = () => {
 
     return (
         <>
-            <h1>Ny användare</h1>
-            <div className="login-container">
-                <h2>Skapa ny användare</h2>
-                <p>Ange ett användarnamn och ett lösenord</p>
+            <div className="container">
 
-                {serverError && <div className="errMess">{serverError}</div>}
+                <h1>Ny användare</h1>
 
-                <form onSubmit={handleSubmit} className="login-form">
-                    <input type="text" placeholder="Användarnamn" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <div className="login-container">
+                    <h2>Skapa ny användare</h2>
+                    <p>Ange ett användarnamn och ett lösenord</p>
 
-                    {errors.username && <span className="errMess">{errors.username}</span>}
+                    {serverError && <div className="errMess">{serverError}</div>}
 
-                    <input type="password" placeholder="Lösenord" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    
-                    {errors.password && <span className="errMess">{errors.password}</span>}
+                    <form onSubmit={handleSubmit} className="login-form">
+                        <input type="text" placeholder="Användarnamn" value={username} onChange={(e) => setUsername(e.target.value)} />
 
-                    <button type="submit">Skapa användare</button>
-                </form>
+                        {errors.username && <span className="errMess">{errors.username}</span>}
+
+                        <input type="password" placeholder="Lösenord" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+                        {errors.password && <span className="errMess">{errors.password}</span>}
+
+                        <button type="submit">Skapa användare</button>
+                    </form>
+
+                </div>
+
             </div>
         </>
     );

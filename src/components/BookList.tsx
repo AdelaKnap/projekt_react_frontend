@@ -5,7 +5,7 @@ import "../components/BookList.css";
 
 // Standardvärden för query och max-resultat per sida
 const defaultQuery = "subject:mystery";
-const maxResult = 40;
+const maxResult = 20;
 
 // Funktion för att sätta ihop url
 const buildUrl = (query: string, startIndex: number): string => {
@@ -94,7 +94,7 @@ const BookList = ({ query }: { query: string }) => {
     };
 
     return (
-        <div>
+        <section>
             {loading && <p>Laddar böcker...</p>}
             {error && <p className="error-message">{error}</p>}
 
@@ -123,7 +123,7 @@ const BookList = ({ query }: { query: string }) => {
                 <span>Sida {totalPages > 0 ? currentPage + 1 : 0} av {totalPages}</span>
                 <button onClick={() => changePage(1)} disabled={currentPage === totalPages - 1 || totalPages === 0}>Nästa</button>
             </div>
-        </div>
+        </section>
     );
 };
 

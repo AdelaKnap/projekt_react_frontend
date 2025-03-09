@@ -138,7 +138,7 @@ const ProfilePage = () => {
     };
 
     return (
-        <section className="profile-container">
+        <div className="container">
 
             <h1>Mina recensioner</h1>
 
@@ -152,60 +152,64 @@ const ProfilePage = () => {
             {/* Felmeddelande */}
             {error && <p className="error">{error}</p>}
 
-            {/* Om inga recensioner visa ett meddelande */}
-            {reviews.length === 0 && !error ? (
-                <p>Du har inga recensioner ännu.</p>
-            ) : (
-                reviews.map((review) => {
-                    // Om en recension ska redigeras
-                    const isEditing = handleReview?._id === review._id;
+            <section className="profile-container">
 
-                    return (
-                        <div key={review._id} className="review-card">
+                {/* Om inga recensioner visa ett meddelande */}
+                {reviews.length === 0 && !error ? (
+                    <p>Du har inga recensioner ännu.</p>
+                ) : (
+                    reviews.map((review) => {
+                        // Om en recension ska redigeras
+                        const isEditing = handleReview?._id === review._id;
 
-                            <h2>{review.bookTitle}</h2>
+                        return (
+                            <div key={review._id} className="review-card">
 
-                            {/* Ej redigering, "visningsläge" */}
-                            {!isEditing && (
-                                <div>
-                                    <p>{review.reviewText}</p>
-                                    <p>Betyg: {review.rating}/5</p>
-                                    <p>Datum: {new Date(review.created!).toLocaleDateString()}</p>
+                                <h2>{review.bookTitle}</h2>
 
-                                    {/* Redigera-knapp */}
-                                    <button onClick={() => {
-                                        setHandleReview(review);
-                                        setUpdatedText(review.reviewText);
-                                        setUpdatedRating(review.rating);
-                                    }}> Redigera </button>
+                                {/* "Visningsläge" */}
+                                {!isEditing && (
+                                    <div>
+                                        <p>{review.reviewText}</p>
+                                        <p><strong>Betyg:</strong> {review.rating}/5</p>
+                                        <p><strong>Datum:</strong> {new Date(review.created!).toLocaleDateString()}</p>
 
-                                    {/* Delete-knapp */}
-                                    <button onClick={() => handleDelete(review._id ?? "")}>Radera</button>
-                                </div>
-                            )}
+                                        {/* Redigera-knapp */}
+                                        <button onClick={() => {
+                                            setHandleReview(review);
+                                            setUpdatedText(review.reviewText);
+                                            setUpdatedRating(review.rating);
+                                        }}> Redigera </button>
 
-                            {/* Om "redigeringsläge" */}
-                            {isEditing && (
-                                <form className="edit-form" onSubmit={(e) => {
-                                    e.preventDefault();
-                                    if (review._id) handleUpdate(review._id);
-                                }}>
+                                        {/* Delete-knapp */}
+                                        <button onClick={() => handleDelete(review._id ?? "")}>Radera</button>
+                                    </div>
+                                )}
 
-                                    <textarea value={updatedText} onChange={(e) => setUpdatedText(e.target.value)} />
-                                    {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
+                                {/* Om "redigeringsläge" */}
+                                {isEditing && (
+                                    <form className="edit-form" onSubmit={(e) => {
+                                        e.preventDefault();
+                                        if (review._id) handleUpdate(review._id);
+                                    }}>
+                                        <label htmlFor="reviewText">Recension:</label>
+                                        <textarea id="reviewText" name="reviewText" value={updatedText} onChange={(e) => setUpdatedText(e.target.value)} />
+                                        {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
 
-                                    <input type="number" value={updatedRating} onChange={(e) => setUpdatedRating(Number(e.target.value))} />
-                                    {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
+                                        <label htmlFor="rating">Sätt ett betyg, 1-5:</label>
+                                        <input type="number" id="rating" name="rating" value={updatedRating} onChange={(e) => setUpdatedRating(Number(e.target.value))} />
+                                        {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
 
-                                    <button type="submit">Spara</button>
-                                    <button type="button" onClick={() => setHandleReview(null)}>Avbryt</button>
-                                </form>
-                            )}
-                        </div>
-                    );
-                })
-            )}
-        </section>
+                                        <button type="submit">Spara</button>
+                                        <button type="button" onClick={() => setHandleReview(null)}>Avbryt</button>
+                                    </form>
+                                )}
+                            </div>
+                        );
+                    })
+                )}
+            </section>
+        </div>
     );
 
 };

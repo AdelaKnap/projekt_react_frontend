@@ -51,33 +51,38 @@ const BookDetailsPage = () => {
 
     return (
         <>
-            <h1>Bokinformation</h1>
+            <div className="container">
 
-            {error && <p className="errorMess">{error}</p>} {/* Visa felmeddelande om det finns */}
+                <h1>Mer om boken</h1>
 
-            {book && book.volumeInfo && ( // All relevant info ligger under volumeInfo
-                <div className="book-details">
+                {error && <p className="errorMess">{error}</p>} {/* Visa felmeddelande om det finns */}
 
-                    <h2>{book.volumeInfo.title}</h2>
+                {book && book.volumeInfo && ( // All relevant info ligger under volumeInfo
+                    <section className="book-details">
 
-                    {book.volumeInfo.imageLinks?.thumbnail && (
-                        <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
-                    )}
-                    <p><strong>Författare:</strong> {book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
-                    <p><strong>Beskrivning:</strong> {book.volumeInfo.description || "Ingen beskrivning finns."}</p>
+                        <h2>{book.volumeInfo.title}</h2>
 
-                    <Link to="/">⬅ Tillbaka till startsidan</Link>
+                        {book.volumeInfo.imageLinks?.thumbnail && (
+                            <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
+                        )}
+                        <p><strong>Författare:</strong> {book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
+                        <p><strong>Beskrivning:</strong> {book.volumeInfo.description || "Ingen beskrivning finns."}</p>
 
-                    {/* Länk till reviewform-sidan */}
-                    <Link
-                        to={`/reviewform/${book.id}`} state={{ title: book.volumeInfo.title }} className="review-link">
-                        Skriv recension (Kräver inloggning)
-                    </Link>
+                        <Link to="/">⬅ Tillbaka till startsidan</Link>
 
-                    {/* ReviewsList-komponenten för recensionerna */}
-                    <ReviewsList bookId={id || ""} />
-                </div>
-            )}
+                        {/* Länk till reviewform-sidan */}
+                        <Link
+                            to={`/reviewform/${book.id}`} state={{ title: book.volumeInfo.title }} className="review-link">
+                            Skriv recension (Kräver inloggning)
+                        </Link>
+
+
+                        {/* ReviewsList-komponenten för recensionerna */}
+                        <ReviewsList bookId={id || ""} />
+                    </section>
+                )}
+                
+            </div>
         </>
     );
 };

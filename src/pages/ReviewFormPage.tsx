@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import "./css/ReviewFormPage.css";
 
 const ReviewForm = () => {
-    
+
     // Hämtar bookId från URL:en
     const { bookId } = useParams<{ bookId: string }>();
 
@@ -89,31 +89,35 @@ const ReviewForm = () => {
     };
 
     return (
-        <section className="form-container">
+        <div className="container">
+            
             <h1>Skriv recension</h1>
-            <h2>Bok: {bookTitle}</h2>
 
-            {error && <p className="error">{error}</p>}
-            {success && <p className="success">{success}</p>}
+            <div className="form-container">
+                <h2>Bok: {bookTitle}</h2>
 
-            <form className="reviewForm" onSubmit={submitForm}>
-                <label htmlFor="reviewText">Recension:</label>
-                <textarea id="reviewText" name="reviewText" value={reviewText} placeholder="Skriv din recension här..." onChange={(e) => setReviewText(e.target.value)} />
+                {error && <p className="error">{error}</p>}
+                {success && <p className="success">{success}</p>}
 
-                {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
+                <form className="reviewForm" onSubmit={submitForm}>
+                    <label htmlFor="reviewText">Recension:</label>
+                    <textarea id="reviewText" name="reviewText" value={reviewText} placeholder="Skriv din recension här..." onChange={(e) => setReviewText(e.target.value)} />
 
-                <label htmlFor="rating">Sätt ett betyg, 1-5:</label>
-                <input type="number" id="rating" name="rating" value={rating} onChange={(e) => setRating(parseInt(e.target.value))} />
+                    {validationErrors.reviewText && <p className="error">{validationErrors.reviewText}</p>}
 
-                {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
+                    <label htmlFor="rating">Sätt ett betyg, 1-5:</label>
+                    <input type="number" id="rating" name="rating" value={rating} onChange={(e) => setRating(parseInt(e.target.value))} />
 
-                <button type="submit">Spara</button>
-            </form>
+                    {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
 
-            <Link to="/">⬅ Tillbaka till startsidan</Link>
+                    <button type="submit">Spara</button>
+                </form>
 
-            <Link to="/profile">Till mina recensioner ➡</Link>
-        </section>
+                <Link to="/">⬅ Tillbaka till startsidan</Link>
+
+                <Link to="/profile">Till mina recensioner ➡</Link>
+            </div>
+        </div>
     );
 };
 
