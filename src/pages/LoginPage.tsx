@@ -56,7 +56,7 @@ const LoginPage = () => {
 
                         <input type="text" placeholder="Användarnamn" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <input type="password" placeholder="Lösenord" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <button type="submit">Logga in</button>
+                        <button type="submit"><i className="fa-solid fa-right-to-bracket"></i> Logga in</button>
 
                         <p><Link to="/create-user">Skapa ny användare här</Link></p>
 

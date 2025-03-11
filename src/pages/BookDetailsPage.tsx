@@ -73,7 +73,7 @@ const BookDetailsPage = () => {
                         {/* Länk till reviewform-sidan */}
                         <Link
                             to={`/reviewform/${book.id}`} state={{ title: book.volumeInfo.title }} className="review-link">
-                            Skriv recension (Kräver inloggning)
+                            <i className="fa-solid fa-pen-to-square"></i> Skriv recension (Kräver inloggning)
                         </Link>
 
 
@@ -81,7 +81,7 @@ const BookDetailsPage = () => {
                         <ReviewsList bookId={id || ""} />
                     </section>
                 )}
-                
+
             </div>
         </>
     );

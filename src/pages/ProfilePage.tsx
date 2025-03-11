@@ -200,8 +200,8 @@ const ProfilePage = () => {
                                         <input type="number" id="rating" name="rating" value={updatedRating} onChange={(e) => setUpdatedRating(Number(e.target.value))} />
                                         {validationErrors.rating && <p className="error">{validationErrors.rating}</p>}
 
-                                        <button type="submit">Spara</button>
-                                        <button type="button" onClick={() => setHandleReview(null)}>Avbryt</button>
+                                        <button className="editBtn" type="submit"><i className="fa-solid fa-floppy-disk"></i> Spara</button>
+                                        <button className="deleteBtn" type="button" onClick={() => setHandleReview(null)}><i className="fa-solid fa-xmark"></i> Avbryt</button>
                                     </form>
                                 )}
                             </div>

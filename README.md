@@ -1,54 +1,18 @@
-# React + TypeScript + Vite
+# DT210G Projket React
+I den här uppgiften har en webbplats skapats med React och Type Script som hämtar böcker från Google Books API och sedan hanterar recensioner i ett externt API.
+Webbplatsen består av en startsida, en sida för att visa enksild bok med mer information samt recensioner knutna till den aktuella boken, en sida för att hantera inloggad användares recensioner, en sida för att lägga till ny recension, en inloggningssida samt en sida för att skapa ny användare.
+Alla sidor förutom startsidan samt sidan med detaljerad information är skyddade och kräver inloggning.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Uppbyggnad
+För att hantera autentisering används filen AuthContext med funktioner för att logga in, logga ut och kontrollera användarsessioner. AuthContext anävnds för att dela användarens autentiseringsinformationen mellan komponenter och där finns en Hook, useAuth-hook, för att få tillgång till dessa funktioner i hela applikationen.
 
-Currently, two official plugins are available:
+På startsidan används komponenten BookList där visas böcker som hämtas från ett API där böcker från genren mysterier hämtas som default. Användaren kan filtrera efter genre samt söka efter böcker där resultaten filtreras dynamsikt. Användaren kan klicka sig vidare på en bok, och kommer då till en sida med information om bara den boken samt alla recensioner knutna till boken som hämtas från servern och som hanteras i komponenten ReviewList. Här finns även möjlighet att lägga till en ny recension, i ett formulär som valideras med Yup, för inloggade användare där ett POST-anrop då görs till servern. På startsidan finns även paginering.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+På inloggningssida kan användaren logga in med användarnamn och lösenord. Om användaren redan är inloggad skickas man automatiskt till sidan "Mina recensioner" och samma upplägg vid lyckad inloggning. Det finns också en länk för att skapa ett nytt användarkonto.
 
-## Expanding the ESLint configuration
+På sidan "Mina recensioner" hämtas alla recensioner från servern, som finns knutna till den inloggade användaren, och lagras i en state. Det finns funktioner för att redigera och radera recensioner där validering sker med YUP. Två komponenter används här:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Utöver dessa komponenter finns även komponeter för header, footer och en komponent som sköter den skyddade sidan.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Skapad av:
+Adela Knap adkn2300@student.miun.se

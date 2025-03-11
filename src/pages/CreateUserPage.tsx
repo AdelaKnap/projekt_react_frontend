@@ -96,7 +96,7 @@ const CreateUserPage = () => {
 
                         {errors.password && <span className="errMess">{errors.password}</span>}
 
-                        <button type="submit">Skapa användare</button>
+                        <button type="submit"> <i className="fa-solid fa-user-plus"></i> Skapa användare</button>
                     </form>
 
                 </div>
