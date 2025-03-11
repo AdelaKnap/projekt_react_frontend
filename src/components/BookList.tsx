@@ -102,15 +102,18 @@ const BookList = ({ query }: { query: string }) => {
             <div className="book-list">
                 {books.length ? (
                     books.map((book) => (
-                        <Link to={`/book/${book.id}`} key={book.id} className="book-card">
+                        <div key={book.id} className="book-card">
                             {book.volumeInfo.imageLinks?.thumbnail && (
                                 <img className="book-image" src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
                             )}
                             <div className="book-info">
                                 <h3 className="book-title">{book.volumeInfo.title}</h3>
                                 <p className="book-authors">{book.volumeInfo.authors?.join(", ") || "Okänd författare"}</p>
+                                <Link to={`/book/${book.id}`} className="read-more">
+                                    📖 Mer om boken
+                                </Link>
                             </div>
-                        </Link>
+                        </div>
                     ))
                 ) : (
                     <p>Inga böcker hittades...</p>

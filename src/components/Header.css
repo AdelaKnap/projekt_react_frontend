@@ -1,5 +1,5 @@
 header {
-    background-color: black;
+    background-color: #464646;
     padding: 20px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -77,6 +77,12 @@ nav ul li a:hover {
 
 .auth-link button:hover {
     color: black;
+}
+
+#banner {
+    width: 100%;
+    height: auto;
+    max-height: 450px;
 }
 
 @media (max-width: 768px) {

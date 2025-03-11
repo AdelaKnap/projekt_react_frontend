@@ -32,7 +32,6 @@ const LoginPage = () => {
             await login({ username, password });   // login-funktionen från AuthContext
             navigate("/profile");                  // Till profilsidan vid lyckad inloggning
 
-            console.log({ username, password })
 
         } catch (error) {
             console.error("Inloggning misslyckades...:", error);

@@ -16,8 +16,6 @@ const HomePage = () => {
 
     return (
         <>
-            <img id="banner" src="/books.jpg" alt="Bannerbild på böcker" />
-
             <div className="container">
 
                 <h1>Böcker</h1>

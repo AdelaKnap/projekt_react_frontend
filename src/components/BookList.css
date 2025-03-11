@@ -40,6 +40,15 @@
     color: #393838;
 }
 
+.read-more {
+    text-decoration: none;
+    color: darkblue;
+}
+
+.read-more:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
 
 .pagination {
     margin-bottom: 10%;
