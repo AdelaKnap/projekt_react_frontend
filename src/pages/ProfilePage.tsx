@@ -175,14 +175,14 @@ const ProfilePage = () => {
                                         <p><strong>Datum:</strong> {new Date(review.created!).toLocaleDateString()}</p>
 
                                         {/* Redigera-knapp */}
-                                        <button onClick={() => {
+                                        <button className="editBtn" onClick={() => {
                                             setHandleReview(review);
                                             setUpdatedText(review.reviewText);
                                             setUpdatedRating(review.rating);
-                                        }}> Redigera </button>
+                                        }}> <i className="fa-solid fa-pen"></i> Redigera</button>
 
                                         {/* Delete-knapp */}
-                                        <button onClick={() => handleDelete(review._id ?? "")}>Radera</button>
+                                        <button className="deleteBtn" onClick={() => handleDelete(review._id ?? "")}> <i className="fa-solid fa-trash"></i> Radera</button>
                                     </div>
                                 )}
 

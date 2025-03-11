@@ -30,13 +30,14 @@ const Header = () => {
                     <div className="auth-link">
                         {
                             // Om användaren inte är inloggad visas Logga in och annars Logga ut-knapp
-                            !user ? <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>Logga in</NavLink> : <button onClick={logout}>Logga ut</button>
+                            !user ? <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}><i className="fa-solid fa-right-to-bracket"></i> Logga in</NavLink>
+                                : <button onClick={logout}><i className="fa-solid fa-right-from-bracket"></i> Logga ut</button>
                         }
                     </div>
 
                 </nav>
             </header>
-            
+
             <img id="banner" src="/books.jpg" alt="Bannerbild på böcker" />
         </>
 
