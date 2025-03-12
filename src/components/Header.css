@@ -81,6 +81,7 @@ nav ul li a:hover {
 
 #banner {
     width: 100%;
+    max-width: 1200px;
     height: auto;
     max-height: 450px;
 }

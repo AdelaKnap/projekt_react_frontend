@@ -8,12 +8,16 @@ interface ReviewsListProps {
 
 const ReviewsList = ({ bookId }: ReviewsListProps) => {
     const [reviews, setReviews] = useState<ReviewInterface[]>([]); // Recensioner
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         // Hämta recensioner
         const getReviews = async () => {
             try {
+
+                setLoading(true);
+
                 const response = await fetch(`https://react-projektapi.onrender.com/reviews?bookId=${bookId}`);
 
                 // Om ingen recension finns (404-not found), sätt tom array
@@ -33,6 +37,8 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
             } catch (error) {
                 console.error(error);
                 setError("Något gick fel vid hämtning av recensionerna.");
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -43,8 +49,18 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
         <>
             <h3>Recensioner</h3>
 
+            {/* Laddningsmeddelande */}
+            {loading && (
+                <div className="fetchInfo">
+                    <span className="loading-spinner"></span>
+                    <p><em>Hämtar recensioner...</em></p>
+                </div>
+            )}
+
+            {/* Felmeddelande */}
             {error && <p className="errorMess">{error}</p>}
 
+            {/* Om inga recensioner visa ett meddelande */}
             {reviews.length === 0 ? (
                 <p>Det finns inga recensioner än!</p>
             ) : (
