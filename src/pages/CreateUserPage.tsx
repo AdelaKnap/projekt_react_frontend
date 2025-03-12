@@ -33,7 +33,7 @@ const CreateUserPage = () => {
             setServerError("");
 
             // Post-anrop för att skapa användare
-            const response = await fetch(`http://localhost:3000/users`, {
+            const response = await fetch(`https://react-projektapi.onrender.com/users`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user),

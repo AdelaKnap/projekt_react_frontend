@@ -54,7 +54,7 @@ const ReviewForm = () => {
             setError(null);
             setSuccess(null);
 
-            const response = await fetch("http://localhost:3000/reviews", {
+            const response = await fetch(`https://react-projektapi.onrender.com/reviews`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

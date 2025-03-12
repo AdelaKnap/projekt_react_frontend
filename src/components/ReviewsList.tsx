@@ -14,7 +14,7 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
         // Hämta recensioner
         const getReviews = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/reviews?bookId=${bookId}`);
+                const response = await fetch(`https://react-projektapi.onrender.com/reviews?bookId=${bookId}`);
 
                 // Om ingen recension finns (404-not found), sätt tom array
                 if (response.status === 404) {
@@ -52,9 +52,9 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
                     {/* Loopar genom recensionerna */}
                     {reviews.map((review) => (
                         <div key={review._id} className="bookReview">
+                            <p><strong>Av:</strong> {review.userId?.username}, {review.created ? new Date(review.created).toLocaleDateString() : ""}</p>
                             <p>{review.reviewText}</p>
                             <p><strong>Betyg:</strong> {review.rating} / 5</p>
-                            <p><strong>Av:</strong> {review.userId?.username}, {review.created ? new Date(review.created).toLocaleDateString() : ""}</p>
                         </div>
                     ))}
                 </div>

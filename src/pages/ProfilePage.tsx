@@ -26,7 +26,7 @@ const ProfilePage = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch("http://localhost:3000/reviews/user", {
+            const response = await fetch(`https://react-projektapi.onrender.com/reviews/user`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -57,7 +57,7 @@ const ProfilePage = () => {
         if (!window.confirm("Är du säker på att du vill ta bort recensionen?")) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/reviews/${id}`, {
+            const response = await fetch(`https://react-projektapi.onrender.com/reviews/${id}`, {
                 method: "DELETE",
                 credentials: "include",
             });
@@ -69,7 +69,7 @@ const ProfilePage = () => {
 
         } catch (error) {
             console.error(error);
-            setError("Ett fel uppstod vid borttagning av recensionen.");
+            setError("Ett fel uppstod vid radering av recensionen.");
         }
     };
 
@@ -100,7 +100,7 @@ const ProfilePage = () => {
             setError(null);
 
             // PUT-anrop
-            const response = await fetch(`http://localhost:3000/reviews/${id}`, {
+            const response = await fetch(`https://react-projektapi.onrender.com/reviews/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
