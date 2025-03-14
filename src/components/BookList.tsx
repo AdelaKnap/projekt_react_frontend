@@ -96,7 +96,8 @@ const BookList = ({ query }: { query: string }) => {
     return (
         <section>
             {loading && <p>Laddar böcker...</p>}
-            {error && <p className="error-message">{error}</p>}
+
+            {error && !loading && <p className="error-message">{error}</p>}
 
             {/* Lista böcker */}
             <div className="book-list">

@@ -150,7 +150,7 @@ const ProfilePage = () => {
             )}
 
             {/* Felmeddelande */}
-            {error && <p className="error">{error}</p>}
+            {error && !loading && <p className="error">{error}</p>}
 
             <section className="profile-container">
 

@@ -58,7 +58,7 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
             )}
 
             {/* Felmeddelande */}
-            {error && <p className="errorMess">{error}</p>}
+            {error && !loading && <p className="errorMess">{error}</p>}
 
             {/* Om inga recensioner visa ett meddelande */}
             {reviews.length === 0 ? (
