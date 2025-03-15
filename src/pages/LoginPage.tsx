@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import "./css/LoginPage.css";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import "./css/LoginPage.css";
 
 const LoginPage = () => {
 
@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     // login-funktionen och användaren från AuthContext
     const { login, user } = useAuth();
@@ -27,8 +28,9 @@ const LoginPage = () => {
         e.preventDefault();
         setError("");
 
-
         try {
+            setLoading(true);    // Laddningsmeddelande 
+
             await login({ username, password });   // login-funktionen från AuthContext
             navigate("/profile");                  // Till profilsidan vid lyckad inloggning
 
@@ -36,6 +38,8 @@ const LoginPage = () => {
         } catch (error) {
             console.error("Inloggning misslyckades...:", error);
             setError("Inloggningen misslyckades, testa igen.")
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -50,6 +54,15 @@ const LoginPage = () => {
                     <h2>Inloggningsuppgifter</h2>
 
                     <form onSubmit={handleSubmit} className="login-form">
+
+                        {/* Laddningsmeddelande */}
+                        {loading && (
+                            <div className="fetchInfo">
+                                <span className="loading-spinner"></span>
+                                <p><em>Du loggas in...</em></p>
+                            </div>
+                        )}
+
                         {error && (
                             <div className="errorMessage">{error}</div>
                         )}

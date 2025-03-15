@@ -46,3 +46,24 @@
     text-align: center;
     border: 1px solid #f5c6cb;
 }
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 4px solid transparent;
+    border-top: 4px solid black;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

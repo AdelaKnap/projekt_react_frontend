@@ -58,10 +58,10 @@ const ReviewsList = ({ bookId }: ReviewsListProps) => {
             )}
 
             {/* Felmeddelande */}
-            {error && !loading && <p className="errorMess">{error}</p>}
+            {error && <p className="errorMess">{error}</p>}
 
             {/* Om inga recensioner visa ett meddelande */}
-            {reviews.length === 0 ? (
+            {!loading && reviews.length === 0 ? (
                 <p>Det finns inga recensioner än!</p>
             ) : (
                 <div className="reviews-section">
